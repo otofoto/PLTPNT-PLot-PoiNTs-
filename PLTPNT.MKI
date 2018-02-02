@@ -1,0 +1,16 @@
+basicRscs =   \
+    $(objectDir)pltpnt.mi \
+    $(objectDir)pltpnt.rsc  
+
+$(objectDir)pltpnt.rsc          : $(baseDir)pltpnt.r \
+				  $(langSpec)pltpntxt.h \
+				  $(privateInc)pltpnt.h
+
+$(baseDir)pltpnt.ma		: $(basicRscs)
+	$(msg)
+	> $(objectDir)make.opt
+	-o$@
+	$(basicRscs)
+	<
+	$(RLibCmd) @$(objectDir)make.opt
+	~time

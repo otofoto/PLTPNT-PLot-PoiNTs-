@@ -1,0 +1,81 @@
+#----------------------------------------------------------------------
+#
+#   pltpnt.mke -- make file for pltpnt.mc
+#
+#----------------------------------------------------------------------
+appName    = pltpnt
+sAppName   = pp
+#DEBUG      = ON
+DEBUG      = OFF
+
+#baseDir    = $(_MakeFilePath)
+
+privateInc = $(baseDir)
+
+%include mdl.mki
+
+#----------------------------------------------------------------------
+# Create needed output directories if they don't exist
+#----------------------------------------------------------------------
+$(o)$(tstdir)			: $(o)$(tstdir)
+
+$(rscObjects)$(tstdir)		: $(rscObjects)$(tstdir)
+
+$(reqdObjs)$(tstdir)		: $(reqdObjs)$(tstdir)
+
+objectDir  = $(o)
+
+#----------------------------------------------------------------------
+#   Define symbol for files included in our link and resource merge
+#----------------------------------------------------------------------
+
+Objs  = \
+	$(objectDir)pltpnt.mo \
+	$(mdlLibs)ditemlib.dlo
+
+Rscs  = \
+	$(objectDir)pltpnt.mp \
+	$(objectDir)pptyp.rsc 
+
+#---------------------------------------------
+#	Make resource to publish structure(s)
+#---------------------------------------------
+$(objectDir)pptyp.r          : $(baseDir)pptyp.mt \
+                               $(baseDir)pltpnt.h
+
+$(objectDir)pptyp.rsc        : $(objectDir)pptyp.r \
+                               $(baseDir)pltpnt.h
+
+#---------------------------------------------
+#	Compile and link MDL Application
+#---------------------------------------------
+$(objectDir)pltpnt.mo          : $(baseDir)pltpnt.mc  $(baseDir)pltpnt.h
+
+$(objectDir)pltpnt.mp          : $(Objs)
+	$(msg)
+        >$(objectDir)make.opt
+        $(linkOpts)
+        -a$@
+        $(Objs)
+	<
+        $(MlinkCmd) @$(objectDir)make.opt
+	~time
+
+#---------------------------------------------
+#	Merge Objects into one file
+#---------------------------------------------
+$(objectDir)pltpnt.mi            : $(Rscs)
+	$(msg)	
+	>$(objectDir)make.opt
+	-o$@
+        $(Rscs)
+	<
+	$(RLibCmd) @$(objectDir)make.opt
+	~time
+
+#---------------------------------------------
+#       Include language specific steps
+#---------------------------------------------
+%include $(baseDir)pltpnt.mki
+
+
