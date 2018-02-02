@@ -25,3 +25,4 @@ test_1s D X Y Z L or D Y X Z L
 test_2s D X Y Z L or D Y X Z L (L not used)
 test_3s X Y Z D L or Y X Z D L (L not used)
 test_4s X Y Z D L or Y X Z D L (D & L not used)
+
